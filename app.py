@@ -15,6 +15,10 @@ word_to_file = dict(zip(df['Kor'], df['Filename']))
 
 VIDEO_FOLDER = 'videos'
 
+@app.route('/ping')
+def ping():
+    return 'pong'
+
 @app.route('/get_video')
 def get_video():
     word = request.args.get('word')
