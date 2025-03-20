@@ -39,6 +39,7 @@ def get_video():
         print("[단어 없음 404]")
         return jsonify({'error': '단어가 없습니다.'}), 404
 
-
+'''
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000)'
+'''
