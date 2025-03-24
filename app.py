@@ -1,9 +1,10 @@
 # app.py 테스트 서버 열어보기
 
-from flask import Flask, send_file, request, jsonify
+from flask import Flask, send_file, request, make_response
 from urllib.parse import unquote
 import pandas as pd
 import os
+import json
 
 app = Flask(__name__)
 
@@ -38,10 +39,16 @@ def get_video():
             return send_file(file_path, mimetype='video/mp4')
         else:
             print("[파일 없음 404]")
-            return jsonify({'error': '파일이 없습니다.'}), 404
+            response_data = {'error': '파일이 없습니다.'}
+            response = make_response(json.dumps(response_data, ensure_ascii=False))
+            response.headers['Content-Type'] = 'application/json; charset=utf-8'
+            return response, 404
     else:
         print("[단어 없음 404]")
-        return jsonify({'error': '단어가 없습니다.'}), 404
+        response_data = {'error': '단어가 없습니다.'}
+        response = make_response(json.dumps(response_data, ensure_ascii=False))
+        response.headers['Content-Type'] = 'application/json; charset=utf-8'
+        return response, 404
 
 '''
 if __name__ == '__main__':
