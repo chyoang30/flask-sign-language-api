@@ -17,7 +17,7 @@
 ## 데이터 출처 및 라이선스
 본 프로젝트는 한국지능정보사회진흥원(NIA)에서 제공하는 **한국어-수어 영상 데이터셋**을 기반으로 수어 영상을 제공합니다.
 
-- **출처**: [AI Hub - 한국지능정보사회진흥원(NIA)](https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&dataSetSn=103)
+- **출처**: [AI Hub - 한국지능정보사회진흥원(NIA)/수어 영상 데이터셋](https://www.aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&dataSetSn=103)
 - **데이터셋 이름**: 수어 영상
 - **데이터 배포 일자**: 2020년 10월
 - **라이선스**:  
