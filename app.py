@@ -52,6 +52,7 @@ def get_video():
         response.headers['Content-Type'] = 'application/json; charset=utf-8'
         return response, 404
 
+'''
 @app.route('/predict', methods=['POST'])
 def predict():
     file = request.files.get('frame')
@@ -74,6 +75,8 @@ def predict_sign(image):
     # TODO: 여기에 AI 모델 예측 코드 작성
     # 지금은 테스트용으로 무조건 '여기' 반환
     return "여기"
+'''
+
 
 '''
 if __name__ == '__main__':
