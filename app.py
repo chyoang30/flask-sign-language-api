@@ -5,7 +5,7 @@ from urllib.parse import unquote
 import pandas as pd
 import os
 import json
-import cv2
+# import cv2
 import numpy as np
 
 app = Flask(__name__)
