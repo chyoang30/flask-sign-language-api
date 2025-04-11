@@ -1,6 +1,6 @@
 # app.py 테스트 서버 열어보기
 
-from flask import Flask, send_file, request, make_response
+from flask import Flask, send_file, request, make_response, jsonify
 from urllib.parse import unquote
 import pandas as pd
 import os
@@ -75,8 +75,8 @@ def to_speech():
             ]
         )
 
-        sentence = response.choices[0].message.content.strip()
-        return {'sentence': sentence}
+        sentence = response.choices[0].message.content.strip().strip('"')
+        return jsonify({'sentence': sentence})
 
     except Exception as e:
         return {'error': str(e)}, 500
