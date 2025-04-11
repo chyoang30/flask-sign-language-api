@@ -5,8 +5,12 @@ from urllib.parse import unquote
 import pandas as pd
 import os
 import json
-# import cv2
 import numpy as np
+
+from dotenv import load_dotenv
+import openai
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 
@@ -52,33 +56,30 @@ def get_video():
         response.headers['Content-Type'] = 'application/json; charset=utf-8'
         return response, 404
 
-'''
-@app.route('/predict', methods=['POST'])
-def predict():
-    file = request.files.get('frame')
+@app.route('/to_speech', methods=['POST'])
+def to_speech():
+    data = request.get_json()
+    words = data.get('words')  # ['화장실', '어디']
 
-    if not file:
-        response_data = {'error': '프레임이 없습니다.'}
-        return response_data, 400
+    if not words or not isinstance(words, list):
+        return {'error': 'words는 리스트여야 합니다.'}, 400
 
-    # 이미지 디코딩
-    file_bytes = np.frombuffer(file.read(), np.uint8)
-    image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+    prompt = f"다음 단어들을 자연스러운 한국어 문장으로 바꿔줘: {words}"
 
-    # 모델로 예측 (예: '여기', '저기' 등)
-    result = predict_sign(image)  # 아래 함수 또는 외부 모듈에서 정의해야 함
-    response_data = {'result': result}
-    return response_data
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "너는 구어체 한국어 문장을 만들어주는 조수야."},
+                {"role": "user", "content": prompt}
+            ]
+        )
 
-# 예시 예측 함수 (더미)
-def predict_sign(image):
-    # TODO: 여기에 AI 모델 예측 코드 작성
-    # 지금은 테스트용으로 무조건 '여기' 반환
-    return "여기"
-'''
+        sentence = response.choices[0].message['content'].strip()
+        return {'sentence': sentence}
+
+    except Exception as e:
+        return {'error': str(e)}, 500
 
 
-'''
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=5000)'
-'''
+
