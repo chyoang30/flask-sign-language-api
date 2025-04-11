@@ -8,9 +8,9 @@ import json
 import numpy as np
 
 from dotenv import load_dotenv
-import openai
+from openai import OpenAI
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 app = Flask(__name__)
 
@@ -67,7 +67,7 @@ def to_speech():
     prompt = f"다음 단어들을 자연스러운 한국어 문장으로 바꿔줘: {words}"
 
     try:
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "너는 구어체 한국어 문장을 만들어주는 조수야."},
