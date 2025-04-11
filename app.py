@@ -75,7 +75,7 @@ def to_speech():
             ]
         )
 
-        sentence = response.choices[0].message['content'].strip()
+        sentence = response.choices[0].message.content.strip()
         return {'sentence': sentence}
 
     except Exception as e:
