@@ -69,6 +69,7 @@ def to_speech():
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
+            temperature=0.0,
             messages=[
                 {"role": "system", "content": "너는 청각장애인의 수어 번역 결과(GLOSS)를 구어체 한국어로 자연스럽게 바꾸어주는 조수야. 문장을 자연스럽게 만들어줘. 대상은 역무원이야."},
                 {"role": "user", "content": prompt}
