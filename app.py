@@ -64,13 +64,13 @@ def to_speech():
     if not words or not isinstance(words, list):
         return {'error': 'words는 리스트여야 합니다.'}, 400
 
-    prompt = f"다음 단어들을 자연스러운 한국어 문장으로 바꿔줘: {words}"
+    prompt = f"다음은 청각장애인이 역무원에게 수어로 표현한 단어(GLOSS) 리스트야 {words}\n이 단어들을 바탕으로, 역무원에게 전달할 수 있는 자연스러운 한국어 문장으로 바꿔줘."
 
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "너는 구어체 한국어 문장을 만들어주는 조수야."},
+                {"role": "system", "content": "너는 청각장애인의 수어 번역 결과(GLOSS)를 구어체 한국어로 자연스럽게 바꾸어주는 조수야. 문장을 자연스럽게 만들어줘. 대상은 역무원이야."},
                 {"role": "user", "content": prompt}
             ]
         )
