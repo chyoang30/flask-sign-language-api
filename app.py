@@ -68,7 +68,7 @@ def to_speech():
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "너는 구어체 한국어 문장을 만들어주는 조수야."},
                 {"role": "user", "content": prompt}
