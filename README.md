@@ -8,8 +8,10 @@
 ---
 
 ## API 서버 정보
-- **서버 명칭**: 수어 영상 조회 API
-- **설명**: 전송된 단어(`word`)에 대응하는 수어 영상을 반환하는 REST API입니다.
+- **서버 명칭**: 수어 영상 조회 및 자연어처리 변환 API  
+- **설명**:  
+  - 전송된 단어(`word`)에 대응하는 수어 영상을 반환  
+  - gloss 형태의 단어 리스트를 자연스러운 한국어 문장으로 변환하는 자연어처리 기능
 - **Base URL**: [https://flask-sign-language-api-production.up.railway.app](https://flask-sign-language-api-production.up.railway.app)
 
 ---
@@ -27,8 +29,8 @@
 ---
 
 ## 주요 기능
-- 검색어(word)에 해당하는 수어 영상을 조회하고 mp4 파일로 반환합니다.
-- 브라우저 또는 비디오 플레이어에서 바로 재생 가능
+- 검색어(`word`)에 해당하는 수어 영상을 조회하고 mp4 파일로 반환합니다.
+- gloss 형태의 단어 리스트(예: `["배", "아프다"]`)를 받아 자연어 문장(예: `"배가 아파요"`)으로 변환합니다.
 
 ---
 
@@ -52,6 +54,35 @@
   - `404`: 단어에 대한 영상 없음  
   - `404`: 파일이 존재하지 않음  
   - `502`: 서버 응답 실패
+
+### 요청
+- **Method**: POST  
+- **Endpoint**: `/to_speech`  
+- **Request Body (JSON)**:  
+  ```json
+  {
+    "words": ["배", "아프다"]
+  }
+
+  ```bash
+  curl -X POST https://your-api-domain.com/to_speech
+    -H "Content-Type: application/json"
+    -d "@test.json"
+
+### 응답
+- 성공 (200 OK): 자연어 문장 반환
+```json
+{
+  "input_words": [
+    "배",
+    "아프다"
+  ],
+  "generated_sentence": "배가 아파요.",
+  "timestamp": "YYYY-MM-DDTHH:MM:SS"
+}
+- 실패 (400, 500): 오류 메시지 반환
+  - 400: 요청 형식 오류
+  - 500: OpenAI 처리 중 오류
 
 ---
 
