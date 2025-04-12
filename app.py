@@ -83,17 +83,33 @@ def to_speech():
         sentence = response.choices[0].message.content.strip().strip('"')
         
         # 테스트용 출력 저장
-        with open("output_test.json", "w", encoding="utf-8") as f:
-            json.dump({
-            "input_words": words,
-            "generated_sentence": sentence,
-            "timestamp": datetime.now().isoformat()
-        }, f, ensure_ascii=False, indent=2)
+        with open("output_log.jsonl", "a", encoding="utf-8") as f:
+            log_entry = {
+                "input_words": words,
+                "generated_sentence": sentence,
+                "timestamp": datetime.now().isoformat()
+            }
+            f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
+
             
         return jsonify({"sentence": sentence})
 
     except Exception as e:
         return {'error': str(e)}, 500
+
+@app.route('/log', methods=['GET'])
+def get_log():
+    log_path = "output_log.jsonl"
+
+    if not os.path.exists(log_path):
+        return jsonify({"message": "로그 파일이 없습니다."}), 404
+
+    try:
+        with open(log_path, "r", encoding="utf-8") as f:
+            logs = [json.loads(line) for line in f.readlines()]
+        return jsonify(logs)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':
