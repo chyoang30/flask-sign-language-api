@@ -3,7 +3,7 @@
 ## 프로젝트 개요
 - **프로젝트명**: 교통 약자 응대를 위한 수어 번역기
 - **설명**: 교통 약자 고객 응대를 위해 직군별로 특화된 수어 표현 번역과 학습이 가능한 도구입니다.  
-  한국어 단어에 대응하는 수어 영상을 제공하는 REST API 서버를 포함합니다.
+  한국어 단어에 대응하는 수어 영상을 제공하고 gloss된 단어 리스트를 구어체로 자연어 처리하는 REST API 서버를 포함합니다.
 
 ---
 
@@ -36,26 +36,34 @@
 
 ## 사용 기술 스택
 - **백엔드 서버**: Python Flask
+  - 영상 조회 및 자연어처리용 API 제공
 - **서버 배포**: Railway
-- **데이터 저장소**: GitHub Repository 내 `/videos` 폴더
+  - GitHub 연동으로 자동 배포
+- **데이터 저장소**: 
+  - 수어 영상: GitHub Repository 내 `/videos` 폴더
+  - gloss → 문장 변환 요청 기록: `output_test.json` (로컬 로그)
+- **자연어처리(NLP)**: OpenAI GPT-3.5 Turbo API
+  - gloss 단어 리스트를 자연어 문장으로 변환
 
 ---
 
 ## API 명세서
-### 요청
+### 1. 수어 영상 조회 API
+#### 요청
 - **Method**: GET  
 - **Endpoint**: `/get_video`  
 - **Query Parameters**:  
   - `word` (string): 검색할 한국어 단어 (예: `위험`, `여기`)
 
-### 응답
+#### 응답
 - 성공 (200 OK): 해당 단어의 수어 영상 mp4 파일 반환  
 - 실패 (404, 502): 오류 메시지 반환  
   - `404`: 단어에 대한 영상 없음  
   - `404`: 파일이 존재하지 않음  
   - `502`: 서버 응답 실패
 
-### 요청
+### 2. 자연어처리 문장 생성 API
+#### 요청
 - **Method**: POST  
 - **Endpoint**: `/to_speech`  
 - **Request Body (JSON)**:  
@@ -63,23 +71,26 @@
   {
     "words": ["배", "아프다"]
   }
-
+  ```
   ```bash
   curl -X POST https://your-api-domain.com/to_speech
     -H "Content-Type: application/json"
     -d "@test.json"
+  ```
 
-### 응답
+#### 응답
 - 성공 (200 OK): 자연어 문장 반환
-```json
-{
-  "input_words": [
-    "배",
-    "아프다"
-  ],
-  "generated_sentence": "배가 아파요.",
-  "timestamp": "YYYY-MM-DDTHH:MM:SS"
-}
+  ```json
+  {
+    "input_words": [
+      "배",
+      "아프다"
+    ],
+    "generated_sentence": "배가 아파요.",
+    "timestamp": "YYYY-MM-DDTHH:MM:SS"
+  }
+  ```
+
 - 실패 (400, 500): 오류 메시지 반환
   - 400: 요청 형식 오류
   - 500: OpenAI 처리 중 오류
@@ -90,6 +101,8 @@
 - API의 `word` 파라미터는 한글 문자열로 정확히 입력하고, URL 인코딩에 유의하세요.  
   (예: `위험` → `word=위험`)
 - 제공되는 모든 수어 영상은 연구 및 학습용으로만 사용 가능합니다.
+- - `/to_speech` 요청은 JSON 형식의 단어 리스트를 POST 방식으로 보내야 합니다.
+- 단어 리스트는 공백 없는 단일 형태소 단어 기준으로 구성되어야 정확한 문장 변환이 가능합니다.
 
 ---
 
