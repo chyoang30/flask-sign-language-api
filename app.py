@@ -6,7 +6,7 @@ import pandas as pd
 import os
 import json
 import numpy as np
-import datetime
+from datetime import datetime
 
 from dotenv import load_dotenv
 from openai import OpenAI
