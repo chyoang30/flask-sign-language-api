@@ -73,9 +73,7 @@
   }
   ```
   ```bash
-  curl -X POST https://your-api-domain.com/to_speech
-    -H "Content-Type: application/json"
-    -d "@test.json"
+  curl -X POST https://flask-sign-language-api-production.up.railway.app/to_speech -H "Content-Type: application/json" -d "@test.json"
   ```
 
 #### 응답
